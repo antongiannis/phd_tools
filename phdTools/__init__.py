@@ -28,4 +28,8 @@ Utility tools
 
 """
 
+# Import graph objects
+from .graphs import *
+
 name = "phdTools"
+__version__ = "0.0.1"

@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+
+
 def donut_chart(labels, sizes, explosion=True, colors=None):
     """
     Creates a donut chart with explosion if selected.
