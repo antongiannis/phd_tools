@@ -18,7 +18,7 @@ def donut_chart(labels, sizes, explosion=True, colors=None):
 
     Returns
     -------
-    None
+    Axes of the plot.
 
     """
 
@@ -29,7 +29,7 @@ def donut_chart(labels, sizes, explosion=True, colors=None):
     explosion_size = 0.05 * explosion
     explode = (explosion_size,) * n_categ
 
-    fig1, ax1 = plt.subplots()
+    fig, ax = plt.subplots()
     patches, texts, autotexts = plt.pie(sizes, colors=colors, labels=labels, autopct='%1.1f%%', startangle=90,
                                         pctdistance=0.85, explode=explode)
 
@@ -47,5 +47,7 @@ def donut_chart(labels, sizes, explosion=True, colors=None):
         text.set_fontsize(10)
 
     # Equal aspect ratio ensures that pie is drawn as a circle
-    ax1.axis('equal')
+    ax.axis('equal')
     plt.tight_layout()
+
+    return fig, ax
