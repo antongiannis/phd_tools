@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 if __name__ == "__main__":
     setuptools.setup(
         name="phdTools",
-        version="0.0.1",
+        version="0.0.2",
         author="Ioannis Antonopoulos",
         author_email="anton.ioannis.phys@gmail.com",
         description="A collection of tools during PhD",
