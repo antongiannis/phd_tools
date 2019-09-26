@@ -3,14 +3,14 @@ import secrets
 import string
 
 
-def credential_generator(no_agents=1, string_length=10):
+def credential_generator(no_accounts=1, string_length=10):
     """
-    Creates credentials (username, password) for a number of agents.
+    Creates credentials (username, password) for a number of accounts.
 
     Parameters
     ----------
-    no_agents: int, optional
-        Integer showing the number of agents.
+    no_accounts: int, optional
+        Integer showing the number of accounts.
     string_length: int, optional
         Integer showing the length of the string for password.
 
@@ -26,7 +26,7 @@ def credential_generator(no_agents=1, string_length=10):
     # List of dictionaries
     credentials_list = []
 
-    for agent in range(no_agents):
+    for account in range(no_accounts):
         username_rnd = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(username_length))
         password_rnd = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(string_length))
         credentials_list.append({"username": username_rnd, "password": password_rnd})
@@ -34,14 +34,14 @@ def credential_generator(no_agents=1, string_length=10):
     return credentials_list
 
 
-def agent_generator(no_agents=1, host="localhost"):
+def account_generator(no_accounts=1, host="localhost"):
     """
     Generates accounts in Prosody xmpp server, for a predefined host in the config file of prosody.
     It only works for ubuntu at this stage.
 
     Parameters
     ----------
-    no_agents: int, optional
+    no_accounts: int, optional
         Integer showing the number of agents.
     host: str, optional
         The name of the host in prosody.
@@ -52,23 +52,23 @@ def agent_generator(no_agents=1, host="localhost"):
     """
 
     # Get the randomly generated pair of username-password pairs
-    agent_credentials = credential_generator(no_agents)
+    account_credentials = credential_generator(no_accounts)
 
     # Utilising the user 'giannis' to do a passwordless sudo. It only stands for my case!
     base_command = "sudo -H -u giannis bash -c"
 
     # Run commands in OS system (in this case ubuntu)
-    for agent in range(no_agents):
-        register_command = " 'sudo prosodyctl register " + agent_credentials[agent].get('username') + ' ' + host \
-                           + ' ' + agent_credentials[agent].get('password') + "'"
+    for account in range(no_accounts):
+        register_command = " 'sudo prosodyctl register " + account_credentials[account].get('username') + ' ' + host \
+                           + ' ' + account_credentials[account].get('password') + "'"
         os.system(base_command + register_command)
 
     # Error handling to be added
 
-    return agent_credentials
+    return account_credentials
 
 
-def agent_destructor(credentials_list, host="localhost"):
+def account_destructor(credentials_list, host="localhost"):
     """
     Deletes the accounts in Prosody xmpp server, for a predefined host in the config file of prosody, when provided with
     a list of username-password pairs. It only works for ubuntu at this stage.
@@ -85,8 +85,8 @@ def agent_destructor(credentials_list, host="localhost"):
     # Utilising the user 'giannis' to do a passwordless sudo. It only stands for my case!
     base_command = "sudo -H -u giannis bash -c"
 
-    for agent in credentials_list:
-        del_command = " 'sudo prosodyctl deluser " + agent.get('username') + "@" + host + "'"
+    for account in credentials_list:
+        del_command = " 'sudo prosodyctl deluser " + account.get('username') + "@" + host + "'"
         os.system(base_command + del_command)
 
     # Error handling to be added
