@@ -48,7 +48,7 @@ def account_generator(no_accounts=1, host="localhost"):
 
     Returns
     -------
-    A list of username-password pairs.
+    A list of jid-password pairs, and a list of username-password pairs
     """
 
     # Get the randomly generated pair of username-password pairs
@@ -63,9 +63,12 @@ def account_generator(no_accounts=1, host="localhost"):
                            + ' ' + account_credentials[account].get('password') + "'"
         os.system(base_command + register_command)
 
+    # Create the jid-password pairs to be returned
+    jid_pass_list = [account.get('username') + "@" + host for account in account_credentials]
+
     # Error handling to be added
 
-    return account_credentials
+    return jid_pass_list, account_credentials
 
 
 def account_destructor(credentials_list, host="localhost"):
@@ -76,7 +79,7 @@ def account_destructor(credentials_list, host="localhost"):
     Parameters
     ----------
     credentials_list: list
-        List of username-password pairs in dict.
+        List of jid-password pairs in dict.
     host: str, optional
         The name of the host in prosody.
 
