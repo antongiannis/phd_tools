@@ -11,7 +11,7 @@ class AddFunction:
     Check the following page:
         https://pandas.pydata.org/pandas-docs/stable/development/extending.html
 
-    To learn more about accessors 
+    To learn more about accessors
     """
     def __init__(self, pandas_obj):
         self._obj = pandas_obj
