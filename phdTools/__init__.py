@@ -31,7 +31,7 @@ Utility tools
 # Import graph objects
 from .graphs import *
 from .prosody_tools import *
-from .utils import  import *
+from .utils import *
 
 name = "phdTools"
 __version__ = "0.0.3"
