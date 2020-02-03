@@ -5,6 +5,7 @@ except ImportError:
 
 install_requires = [
     'matplotlib>=1.4.3',
+	'numpy'
 ]
 
 with open("README.md", "r") as fh:
@@ -15,7 +16,7 @@ with open("README.md", "r") as fh:
 if __name__ == "__main__":
     setuptools.setup(
         name="phdTools",
-        version="0.0.3",
+        version="0.0.4",
         author="Ioannis Antonopoulos",
         author_email="anton.ioannis.phys@gmail.com",
         description="A collection of tools during PhD",
