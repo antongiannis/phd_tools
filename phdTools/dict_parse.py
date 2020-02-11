@@ -122,17 +122,17 @@ def flatten_dict_vega(data_dict, previous_key='', items_list=[]):
             items_list.append({"id": key, "name": key})
             # If nested dict call function
             if isinstance(value, dict):
-                intermediate_flat = flatten_dict_vega(value, key, items_list)
+                _ = flatten_dict_vega(value, key, items_list)  # Use _ for unused assignments
             else:
                 pass
         # If not root node
         else:
             # Append id and parent to list
-            id_key = previous_key + '_' + key # needs to be unique
+            id_key = previous_key + '_' + key  # needs to be unique
             items_list.append({"id": id_key, "name": key, "parent": previous_key})
             # If nested dict call function
             if isinstance(value, dict):
-                intermediate_flat = flatten_dict_vega(value, id_key, items_list)
+                _ = flatten_dict_vega(value, id_key, items_list)
             else:
                 pass
 
