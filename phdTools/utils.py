@@ -2,6 +2,43 @@ import requests
 from requests.exceptions import HTTPError
 from requests_oauthlib import OAuth2Session
 import pandas as pd
+from functools import singledispatch
+
+
+# Use the `@singledispatch` decorator to transform the function to a single-dispatch generic function.
+@singledispatch
+def depth(_, _level=0, _memo=None):
+    """
+    A generic function composed of multiple functions calculating the depth of an object (e.g. dict, list, etc.).
+    Which implementation should be used during a call is determined by the dispatch algorithm. In this case the
+    implementation is chosen based on the type of a single argument (first argument of the function).
+    """
+    return _level
+
+
+# Use the the `register()` decorator to add overloaded implementations to the `depth` function
+@depth.register
+def _dict_depth(input_dict: dict, _level=0, **kw):
+    """
+    The implementation of the `depth()` generic function for dictionary type.
+    """
+    # Create a list that gets the depth of every node recursively
+    out_list = [depth(value, _level=_level + 1, **kw) for value in input_dict.values()]
+
+    # Return the max of the list, with 0 is it's empty.
+    return max(out_list, default=0)
+
+
+@depth.register
+def _list_depth(input_list: list, _level=0, **kw):
+    """
+    The implementation of the `depth()` generic function for list type.
+    """
+    # Create a list that gets the depth of every node recursively
+    out_list = [depth(value, _level=_level + 1, **kw) for value in input_list]
+
+    # Return the max of the list, with 0 is it's empty.
+    return max(out_list, default=0)
 
 
 @pd.api.extensions.register_dataframe_accessor("phd")
