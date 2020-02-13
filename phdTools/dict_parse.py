@@ -1,5 +1,4 @@
 import numpy as np
-import json
 
 # check for multiple root nodes
 # If there are then create a new root node so it can be parsed by Vega tree function
@@ -67,7 +66,7 @@ def create_root_node_vega(data_list, root_name='root'):
     return out_list
 
 
-def flatten_dict_vega(data_dict, _previous_key='', _input_tuple=()):
+def flatten_dict_vega(data_dict, _previous_key='', _items_list=None):
     """
     Function to convert a python nested dictionary to json format. It is the output needed for
     Vega tree graph. In the future could add support for additional graphs.
@@ -103,40 +102,40 @@ def flatten_dict_vega(data_dict, _previous_key='', _input_tuple=()):
         Dictionary to be used as an input.
     _previous_key: str, optional
         The key of the parent node in a nested dictionary.
-    _input_tuple: tuple, optional
-        The main tuple of dictionaries.
+    _items_list: list, optional
+        The main list of dictionaries.
 
     Returns
     -------
     A tuple of dictionaries.
     """
 
-    # There is a problem with the list !!
-    # Maybe use immutable and convert it to list. Need to look into it! Maybe use a tuple
+    if _items_list is None:
+        _items_list = []
 
     for key, value in data_dict.items():
         # If root node
         if not _previous_key:
-            #items_list.append({"id": key, "name": key})
-            out_tuple = _input_tuple + ({"id": key, "name": key},)
+            _items_list.append({"id": key, "name": key})
+
             # If nested dict call function
             if isinstance(value, dict):
-                _ = flatten_dict_vega(value, key, out_tuple)  # Use _ for unused assignments
+                _ = flatten_dict_vega(value, key, _items_list)  # Use _ for unused assignments
             else:
                 pass
         # If not root node
         else:
             # Append id and parent to list
             id_key = _previous_key + '_' + key  # needs to be unique
-            # items_list.append({"id": id_key, "name": key, "parent": _previous_key})
-            out_tuple = _input_tuple + ({"id": id_key, "name": key, "parent": _previous_key},)
+            _items_list.append({"id": id_key, "name": key, "parent": _previous_key})
+
             # If nested dict call function
             if isinstance(value, dict):
-                _ = flatten_dict_vega(value, id_key, out_tuple)
+                _ = flatten_dict_vega(value, id_key, _items_list)
             else:
                 pass
 
-    return out_tuple
+    return _items_list
 
 
 def find_by_key(data_dict, target_key):
