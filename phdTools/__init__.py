@@ -22,16 +22,17 @@ Utility tools
 
 ::
 
- test              --- Run unittests (not yet)
+ test              --- Run pytest (not yet)
  show_config       --- Show build configuration (not yet)
  __version__       --- phdTools version string
 
 """
 
-# Import graph objects
+# Import modules
 from .graphs import *
 from .prosody_tools import *
 from .utils import *
+from .dict_parse import *
 
 name = "phdTools"
-__version__ = "0.0.3"
+__version__ = "0.0.5"
