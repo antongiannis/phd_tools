@@ -5,7 +5,9 @@ except ImportError:
 
 install_requires = [
     'matplotlib>=1.4.3',
-	'numpy'
+	'numpy',
+	'requests',
+	'requests_oauthlib'
 ]
 
 with open("README.md", "r") as fh:

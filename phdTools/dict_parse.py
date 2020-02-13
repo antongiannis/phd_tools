@@ -67,7 +67,7 @@ def create_root_node_vega(data_list, root_name='root'):
     return out_list
 
 
-def flatten_dict_vega(data_dict, previous_key='', items_list=[]):
+def flatten_dict_vega(data_dict, _previous_key='', _input_tuple=()):
     """
     Function to convert a python nested dictionary to json format. It is the output needed for
     Vega tree graph. In the future could add support for additional graphs.
@@ -101,42 +101,42 @@ def flatten_dict_vega(data_dict, previous_key='', items_list=[]):
     ----------
     data_dict: dict
         Dictionary to be used as an input.
-    previous_key: str, optional
+    _previous_key: str, optional
         The key of the parent node in a nested dictionary.
-    items_list: list, optional
-        The main list of dictionaries.
+    _input_tuple: tuple, optional
+        The main tuple of dictionaries.
 
     Returns
     -------
-    A list of dictionaries.
+    A tuple of dictionaries.
     """
 
     # There is a problem with the list !!
-    # Maybe use immutable and convert it to list. Need to look into it!
-    # problem with setting a unique ID --> maybe have the
+    # Maybe use immutable and convert it to list. Need to look into it! Maybe use a tuple
 
     for key, value in data_dict.items():
         # If root node
-        if not previous_key:
-            # Append id to list
-            items_list.append({"id": key, "name": key})
+        if not _previous_key:
+            #items_list.append({"id": key, "name": key})
+            out_tuple = _input_tuple + ({"id": key, "name": key},)
             # If nested dict call function
             if isinstance(value, dict):
-                _ = flatten_dict_vega(value, key, items_list)  # Use _ for unused assignments
+                _ = flatten_dict_vega(value, key, out_tuple)  # Use _ for unused assignments
             else:
                 pass
         # If not root node
         else:
             # Append id and parent to list
-            id_key = previous_key + '_' + key  # needs to be unique
-            items_list.append({"id": id_key, "name": key, "parent": previous_key})
+            id_key = _previous_key + '_' + key  # needs to be unique
+            # items_list.append({"id": id_key, "name": key, "parent": _previous_key})
+            out_tuple = _input_tuple + ({"id": id_key, "name": key, "parent": _previous_key},)
             # If nested dict call function
             if isinstance(value, dict):
-                _ = flatten_dict_vega(value, id_key, items_list)
+                _ = flatten_dict_vega(value, id_key, out_tuple)
             else:
                 pass
 
-    return items_list
+    return out_tuple
 
 
 def find_by_key(data_dict, target_key):
@@ -183,7 +183,7 @@ def dict_struct(data_dict):
     return out_dict
 
 
-def flat_dict(data_dict, input_tuple=()):
+def flat_dict(data_dict, _input_tuple=()):
     """
     Recursive function to get a nested dictionary to a dictionary of tuples.
 
@@ -191,7 +191,7 @@ def flat_dict(data_dict, input_tuple=()):
     ----------
     data_dict: dict
         Input dictionary to print.
-    input_tuple: tuple, optional
+    _input_tuple: tuple, optional
         Initial tuple to pass.
 
     Returns
@@ -201,17 +201,17 @@ def flat_dict(data_dict, input_tuple=()):
     out_dict = {}
     for key, value in data_dict.items():
         if isinstance(value, dict):
-            out_tuple = input_tuple + (key,)
+            out_tuple = _input_tuple + (key,)
             sub_value = flat_dict(value, out_tuple)
             out_dict.update(sub_value)
         else:
-            out_tuple = input_tuple + (key,)
+            out_tuple = _input_tuple + (key,)
             out_dict.update({out_tuple: value})
 
     return out_dict
 
 
-def print_tree(data_dict, level=0):
+def print_tree(data_dict, _level=0):
     """
     Recursive function to print the structure of a dictionary.
 
@@ -219,12 +219,12 @@ def print_tree(data_dict, level=0):
     ----------
     data_dict: dict
         Input dictionary to print.
-    level: int, optional
+    _level: int, optional
         Integer showing the starting level for tabs.
     """
     for key, value in data_dict.items():
         if isinstance(value, dict):
-            print("\t" * level, key)
-            print_tree(value, level + 1)
+            print("\t" * _level, key)
+            print_tree(value, _level + 1)
         else:
-            print("\t" * level, key)
+            print("\t" * _level, key)
